@@ -3,7 +3,7 @@
 
 # image_to_text = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
-# print(image_to_text("3.jpg"))
+# print(image_to_text("./assets/3.jpg"))
 
 
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
@@ -39,4 +39,4 @@ def predict_step(image_paths):
   return preds
 
 
-print(predict_step(['3.jpg']))
+print(predict_step(['./assets/3.jpg']))

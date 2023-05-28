@@ -1,19 +1,24 @@
 import express from "express";
 import { pipeline } from "@xenova/transformers";
+import path from "path";
 // List of available models
 // https://huggingface.co/models?other=transformers.js&sort=modified
 
 const app = express();
-const port = 3000;
+const port = 3333;
+const __dirname = path.resolve();
 
 app.get("/classify", async (req, res) => {
   try {
+    const t0 = performance.now();
+
     let pipe = await pipeline(
       "text-classification",
       "Xenova/distilbert-base-uncased-finetuned-sst-2-english"
     );
     let out = await pipe("I love transformers!");
-    res.json(out);
+    const t1 = performance.now();
+    res.json({ output: out, execution_time: Math.ceil(t1 - t0) + "ms" });
   } catch (e) {
     console.log(e);
   }
@@ -21,12 +26,20 @@ app.get("/classify", async (req, res) => {
 
 app.get("/tag", async (req, res) => {
   try {
+    if (!req.query.imageName) throw Error("imageName is required");
+    const t0 = performance.now();
     let pipe = await pipeline(
       "image-to-text",
       "Xenova/vit-gpt2-image-captioning"
     );
-    let out = await pipe("./assets/3.jpg");
-    res.json(out);
+    const pathFile = path.resolve(
+      __dirname,
+      `./assets/${req.query.imageName}.jpg`
+    );
+    const t1 = performance.now();
+
+    let out = await pipe(pathFile);
+    res.json({ output: out, execution_time: Math.ceil(t1 - t0) + "ms" });
   } catch (e) {
     console.log(e);
     res.json({});
@@ -35,5 +48,15 @@ app.get("/tag", async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+  console.log(`Transformers server http://localhost:${port}/`);
+});
+
+console.time("start");
+
+const pathFile = path.resolve(__dirname, `./assets/3.jpg`);
+pipeline("image-to-text", "Xenova/vit-gpt2-image-captioning").then((pipe) => {
+  pipe(pathFile).then((out) => {
+    console.timeEnd("start");
+    console.log(out);
+  });
 });

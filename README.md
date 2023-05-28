@@ -1,5 +1,13 @@
 # Examples using huggingface transformers
 
+
+## Performance
+For some reason unknown to me running scripts through javascript is a lot faster.
+
+| Language | Execution Time |
+|----------|---------------|
+| JavaScript | 2.787 seconds |
+| Python | 12.940 seconds |
 ## Javascript
 
 List of available models for javascript

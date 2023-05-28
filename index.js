@@ -23,26 +23,9 @@ app.get("/tag", async (req, res) => {
   try {
     let pipe = await pipeline(
       "image-to-text",
-      "Xenova/vit-gpt2-image-captioning" 
+      "Xenova/vit-gpt2-image-captioning"
     );
-    let out = await pipe(
-      "./assets/3.jpg"
-    );
-    res.json(out);
-  } catch (e) {
-    console.log(e);
-    res.json({});
-  }
-});
-
-app.get("/tag2", async (req, res) => {
-  try {
-    let pipe = await pipeline(
-      "zero-shot-classification"
-    );
-    let out = await pipe(
-      "./assets/3.jpg"
-    );
+    let out = await pipe("./assets/3.jpg");
     res.json(out);
   } catch (e) {
     console.log(e);

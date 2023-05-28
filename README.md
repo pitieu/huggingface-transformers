@@ -20,3 +20,7 @@ Both perform the same but this is more condensed
 
 List of available models for python
 [Hugginface Python transformers](https://huggingface.co/models?library=transformers&sort=downloads)
+
+### Run python
+
+`npm run python`
